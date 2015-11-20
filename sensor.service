@@ -1,0 +1,16 @@
+[Unit]
+Description=Sensor
+After=network.target auditd.service
+
+[Service]
+EnvironmentFile=-/etc/default/ssh
+ExecStart=/home/vjeko/dev/Time-Series/scripts/influx.py \
+  <host> <user> <pass> \
+  env /home/vjeko/dev/Time-Series/lol_dht22/loldht
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+Alias=sshd.service
