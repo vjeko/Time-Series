@@ -1,0 +1,13 @@
+[Unit]
+Description=Traffic
+After=network.target auditd.service
+
+[Service]
+ExecStart=/home/vjeko/dev/Time-Series/scripts/influx.py \
+  vandalia.local root root traffic eth7
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
