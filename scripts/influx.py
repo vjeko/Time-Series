@@ -23,8 +23,8 @@ env = {
 aggregate = {
     'measurement' : 'aggregate',
     'fields' : {
-        'value' : None
-        'value' : None
+        'in'  : None,
+        'out' : None
     }
 }
 

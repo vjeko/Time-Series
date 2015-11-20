@@ -110,7 +110,7 @@ static int read_dht22_dat()
   }
   else
   {
-    printf("Data not good, skip\n");
+    fprintf(stderr, "Data not good, skip\n");
     return 0;
   }
 }
@@ -120,12 +120,12 @@ int main (int argc, char *argv[])
   int lockfd;
 
   if (argc != 2)
-    printf ("usage: %s <pin>\ndescription: pin is the wiringPi pin number\nusing 7 (GPIO 4)\n",argv[0]);
+    fprintf(stderr, "usage: %s <pin>\ndescription: pin is the wiringPi pin number\nusing 7 (GPIO 4)\n",argv[0]);
   else
     DHTPIN = atoi(argv[1]);
    
 
-  printf ("Raspberry Pi wiringPi DHT22 reader\nwww.lolware.net\n") ;
+  fprintf(stderr, "Raspberry Pi wiringPi DHT22 reader\nwww.lolware.net\n") ;
 
   lockfd = open_lockfile(LOCKFILE);
 

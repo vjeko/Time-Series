@@ -1,0 +1,1 @@
+cd /home/vjeko/dev/Time-Series/scripts && tmux new-session -d './influx.py <host> <user> <password> env ../lol_dht22/loldht'
