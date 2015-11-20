@@ -41,7 +41,7 @@ def read_traffic(client, interface):
     aggregate['fields']['out'] = float(out[IDX.txkBs])*1024
     aggregate['fields']['in'] = float(out[IDX.rxkBs])*1024
 
-    commited = client.write_points([aggregate_in, aggregate_out])
+    commited = client.write_points([aggregate])
 
 
 def read_env(client, executable):
