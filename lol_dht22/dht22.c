@@ -17,6 +17,7 @@
 #include "locking.h"
 
 #define MAXTIMINGS 85
+#define DELTA 5000
 static int DHTPIN = 11;
 static int dht22_dat[5] = {0,0,0,0,0};
 
@@ -105,8 +106,11 @@ static int read_dht22_dat()
         if ((dht22_dat[2] & 0x80) != 0)  t *= -1;
 
 
-    fprintf(stdout, "%.f %.2f %.2f\n", now(), t, h );
-    return 1;
+    char buf[100];
+    sprintf(buf, "/home/vjeko/dev/Time-Series/scripts/influx.py vandalia root root write %.2f %.2f\n", t, h);
+    int ret = system(buf);
+    printf("%s -- %d\n", buf, ret);
+    return 0;
   }
   else
   {
@@ -140,7 +144,7 @@ int main (int argc, char *argv[])
 
   while (read_dht22_dat() == 0) 
   {
-     delay(1000); // wait 1sec to refresh
+     delay(DELTA); // wait 1sec to refresh
   }
 
   delay(1500);

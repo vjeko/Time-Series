@@ -8,6 +8,8 @@ import argparse
 from influxdb import InfluxDBClient
 from enum import Enum
 
+INTERVAL = 30
+
 class IDX:
     desc, IFACE, rxpcks, txpcks, rxkBs,\
     txkBs, rxcmps, txcmps, rxmcsts, util = range(0, 10)
@@ -44,21 +46,24 @@ def read_traffic(client, interface):
     commited = client.write_points([aggregate])
 
 
+def commit_env(client, temp, humid):
+    env['fields']['temp'] = float(temp)
+    env['fields']['humid'] = float(humid)
+
+    print temp, humid
+    commited = client.write_points([env])
+
+
 def read_env(client, executable):
+
+    time.sleep(INTERVAL)
     cmd = [executable]
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                               stderr=subprocess.PIPE)
     out, err = p.communicate()
     timestamp, temp, humid = out.split()
     
-    env['fields']['temp'] = float(temp)
-    env['fields']['humid'] = float(humid)
-
-    print temp, humid
-    time.sleep(1)
-
-    commited = client.write_points([env])
-
+    commit_env(client, temp, humid)
 
 def main():
     parser = argparse.ArgumentParser()
@@ -79,6 +84,10 @@ def main():
     elif command[0] == 'env':
         dbname = 'env'
         executable = command[1]
+    elif command[0] == 'write':
+        dbname = 'env'
+        temp = command[1]
+        humid = command[2]
     else:
         print 'Unknown command. Exiting...'
         sys.exit(1)
@@ -96,6 +105,8 @@ def main():
     elif command[0] == 'env':
         while(True):
             read_env(client, executable) 
+    elif command[0] == 'write':
+        commit_env(client, temp, humid)
 
 
 if __name__ == "__main__":
